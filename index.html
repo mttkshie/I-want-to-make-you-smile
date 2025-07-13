@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I want to make you smile</title>
+  <style>
+    body {
+      background: #fff0f5;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      position: relative;
+    }
+
+    .floating-flowers {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .flower-petal {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.6;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .flower {
+      width: 300px;
+      height: auto;
+      image-rendering: pixelated;
+      animation: float 4s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    input[type="text"] {
+      margin-top: 30px;
+      padding: 12px;
+      width: 320px;
+      border: 2px solid #f06292;
+      border-radius: 8px;
+      outline: none;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .label {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #444;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-flowers" id="floatingFlowers"></div>
+
+  <div class="content">
+    <img src="neutral.png" alt="Flower" class="flower" id="flower">
+    <input type="text" id="chatbox" placeholder="Type something sweet...">
+    <div class="label">Type something that will make the flower happy...</div>
+  </div>
+
+  <script>
+    const flower = document.getElementById("flower");
+    const chatbox = document.getElementById("chatbox");
+
+    const triggers = [
+      "i love you",
+      "iloveyou",
+      "iloveyousomuch",
+      "imissyou",
+      "kristin camilla silvestre",
+      "kc silvestre",
+      "kc",
+      "silvestre",
+      "mahal",
+      "baby"
+    ];
+
+    chatbox.addEventListener("input", () => {
+      const value = chatbox.value.toLowerCase().replace(/\s/g, "");
+
+      if (value === "") {
+        flower.src = "neutral.png";
+      } else if (triggers.some(trigger => value.includes(trigger.replace(/\s/g, "")))) {
+        flower.src = "smile.png";
+      } else {
+        flower.src = "sad.png";
+      }
+    });
+
+    // 🌸 Floating flower background generator
+    const floatingContainer = document.getElementById("floatingFlowers");
+
+    function createFlower() {
+      const flower = document.createElement("div");
+      flower.classList.add("flower-petal");
+
+      // Random image from 1.png to 6.png
+      const randomIndex = Math.floor(Math.random() * 6) + 1;
+      flower.style.backgroundImage = `url('${randomIndex}.png')`;
+
+      flower.style.left = Math.random() * 100 + "vw";
+      flower.style.animationDuration = 5 + Math.random() * 5 + "s";
+      flower.style.opacity = Math.random();
+      flower.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+      floatingContainer.appendChild(flower);
+
+      setTimeout(() => {
+        flower.remove();
+      }, 10000);
+    }
+
+    setInterval(createFlower, 500);
+  </script>
+
+</body>
+</html>
